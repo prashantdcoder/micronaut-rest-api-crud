@@ -86,4 +86,24 @@ class UserService {
         }
         return dto
     }
+
+    @Transactional
+    public DTO delete(String userId) {
+        DTO dto
+        try {
+
+            User user = User.findById(userId.toLong())
+            if (!user) {
+                dto = new DTO(false, "No record found")
+            } else {
+                user.delete(flush: true, failOnError: true)
+                dto = new DTO(true, "Your record has been deleted successfully")
+            }
+
+        } catch (Exception e) {
+            dto = new DTO(false, e.getMessage())
+        }
+
+        return dto
+    }
 }
