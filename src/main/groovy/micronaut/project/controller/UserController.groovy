@@ -44,4 +44,9 @@ class UserController {
         return HttpResponse.ok(userService.delete(userId))
     }
 
+    @Get(value = "/view", consumes = MediaType.APPLICATION_JSON)
+    HttpResponse<DTO> view() {
+        return HttpResponse.ok(userService.view())
+    }
+
 }
