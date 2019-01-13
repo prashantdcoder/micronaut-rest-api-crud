@@ -7,6 +7,7 @@ import micronaut.project.CO.AddCO
 import micronaut.project.CO.UpdateCO
 import micronaut.project.DTO.DTO
 import micronaut.project.VO.EditVO
+import micronaut.project.VO.ViewVO
 import micronaut.project.domain.User
 
 @Prototype
@@ -104,6 +105,17 @@ class UserService {
             dto = new DTO(false, e.getMessage())
         }
 
+        return dto
+    }
+
+    public DTO view() {
+        DTO dto
+        try {
+            List<User> userList = User.fetchAllUsers()
+            dto = new DTO(true, userList.collect { new ViewVO(it) })
+        } catch (Exception e) {
+            dto = new DTO(false, e.getMessage())
+        }
         return dto
     }
 }

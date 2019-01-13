@@ -22,4 +22,9 @@ class User {
     static mapping = {
         table 'app_user'
     }
+
+    static List<User> fetchAllUsers() {
+        List<User> userList = createCriteria().list {} as List<User>
+        return userList
+    }
 }
