@@ -1,0 +1,24 @@
+micronaut:
+    application:
+        name: rest-api-crud
+
+#Database
+dataSource:
+    pooled: true
+    jmxExport: true
+    url: "jdbc:postgresql://localhost:5432/rest_api_crud"
+    driverClassName: org.postgresql.Driver
+    username: "postgres"
+    password: "root"
+
+#Hibernate
+hibernate:
+    hbm2ddl:
+        auto: create-drop
+    cache:
+        queries: false
+        use_second_level_cache: true
+        use_query_cache: false
+          #region.factory_class: org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory
+          #dialect: org.hibernate.dialect.PostgreSQLDialect
+
