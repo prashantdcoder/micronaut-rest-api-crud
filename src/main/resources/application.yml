@@ -14,7 +14,7 @@ dataSource:
 #Hibernate
 hibernate:
     hbm2ddl:
-        auto: create-drop
+        auto: update
     cache:
         queries: false
         use_second_level_cache: true
