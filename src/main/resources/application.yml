@@ -1,24 +1,47 @@
 micronaut:
-    application:
-        name: rest-api-crud
+  application:
+    name: rest-api-crud
+
+  security:
+    enabled: true
+    endpoints:
+      login:
+        enabled: true
+      oauth:
+        enabled: true
+    token:
+      jwt:
+        enabled: true
+        signatures:
+          secret:
+            generator:
+              secret: 'gGvKbUQhGHVHZAkTZZubZvGVdWPixoIdWIWzXkhiSINCZhSvpbQkLMNFPEAchWaI'
+              refresh-token-expiration: 3600
+              access-token-expiration: 3600
 
 #Database
 dataSource:
-    pooled: true
-    jmxExport: true
-    url: "jdbc:postgresql://localhost:5432/rest_api_crud"
-    driverClassName: org.postgresql.Driver
-    username: "postgres"
-    password: "root"
+  pooled: true
+  jmxExport: true
+  url: "jdbc:postgresql://localhost:5432/postgres"
+  driverClassName: org.postgresql.Driver
+  username: "postgres"
+  password: "root"
 
 #Hibernate
 hibernate:
-    hbm2ddl:
-        auto: update
-    cache:
-        queries: false
-        use_second_level_cache: true
-        use_query_cache: false
-          #region.factory_class: org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory
-          #dialect: org.hibernate.dialect.PostgreSQLDialect
+  hbm2ddl:
+    auto: update
+  cache:
+    queries: false
+    use_second_level_cache: true
+    use_query_cache: false
+    #region.factory_class: org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory
+    #dialect: org.hibernate.dialect.PostgreSQLDialect
+
+
+
+
+
+
 
