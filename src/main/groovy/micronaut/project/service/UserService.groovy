@@ -1,5 +1,6 @@
 package micronaut.project.service
 
+import grails.gorm.services.Service
 import grails.gorm.transactions.Transactional
 import io.micronaut.context.annotation.Prototype
 import micronaut.project.AppUtilities.AppUtils
@@ -10,7 +11,7 @@ import micronaut.project.VO.EditVO
 import micronaut.project.VO.ViewVO
 import micronaut.project.domain.User
 
-@Prototype
+@Service(User)
 class UserService {
 
     public DTO index() {
