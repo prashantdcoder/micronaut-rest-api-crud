@@ -1,20 +1,17 @@
 package micronaut.project.AppUtilities
 
-import java.sql.Date
-import java.util.Date
+
 import java.text.SimpleDateFormat
 
 class AppUtils {
 
+    static SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy")
 
     static String parseSqlDateToString(Date date) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy")
-        return simpleDateFormat.format(date)
+        return dateFormat.format(date)
     }
 
     static Date parseStringDateToSql(String date) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy")
-        Date sqlDate = new Date(simpleDateFormat.parse(date).getTime())
-        return sqlDate
+        return new Date(dateFormat.parse(date).getTime())
     }
 }

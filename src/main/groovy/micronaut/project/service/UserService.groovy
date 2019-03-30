@@ -2,19 +2,23 @@ package micronaut.project.service
 
 import grails.gorm.services.Service
 import grails.gorm.transactions.Transactional
-import io.micronaut.context.annotation.Prototype
 import micronaut.project.AppUtilities.AppUtils
 import micronaut.project.CO.AddCO
+import micronaut.project.CO.RegistrationCO
 import micronaut.project.CO.UpdateCO
 import micronaut.project.DTO.DTO
 import micronaut.project.VO.EditVO
+import micronaut.project.VO.UserVO
 import micronaut.project.VO.ViewVO
+import micronaut.project.constants.RoleConstant
+import micronaut.project.domain.Profile
+import micronaut.project.domain.Role
 import micronaut.project.domain.User
 
 @Service(User)
 class UserService {
 
-    public DTO index() {
+    DTO index() {
         DTO dto
         try {
             String welcome = "Welcome to Micronaut Rest API C.R.U.D Application"
@@ -26,7 +30,7 @@ class UserService {
     }
 
     @Transactional
-    public DTO add(AddCO addCO) {
+    DTO add(AddCO addCO) {
         DTO dto
         try {
 
@@ -51,7 +55,7 @@ class UserService {
     }
 
     @Transactional
-    public DTO<EditVO> edit(String userId) {
+    DTO<EditVO> edit(String userId) {
         DTO<EditVO> dto
 
         try {
@@ -68,7 +72,7 @@ class UserService {
     }
 
     @Transactional
-    public DTO update(UpdateCO updateCO) {
+    DTO update(UpdateCO updateCO) {
         DTO dto
         try {
 
@@ -90,7 +94,7 @@ class UserService {
     }
 
     @Transactional
-    public DTO delete(String userId) {
+    DTO delete(String userId) {
         DTO dto
         try {
 
@@ -109,7 +113,7 @@ class UserService {
         return dto
     }
 
-    public DTO view() {
+    DTO view() {
         DTO dto
         try {
             List<User> userList = User.fetchAllUsers()
@@ -119,4 +123,35 @@ class UserService {
         }
         return dto
     }
+
+    @Transactional
+    DTO registration(RegistrationCO registrationCO) {
+        DTO dto = null
+        try {
+            User user = User.findByUsernameOrEmail(registrationCO.username, registrationCO.email)
+            if (user) {
+                dto = new DTO(false, "Username/email already exists")
+            } else {
+
+                user = new User(
+                        username: registrationCO.username,
+                        fullName: registrationCO.fullName,
+                        dateOfBirth: AppUtils.parseStringDateToSql(registrationCO.dateOfBirth),
+                        password: registrationCO.password.md5(),
+                        phoneCode: registrationCO.phoneCode,
+                        phone: registrationCO.phone,
+                        email: registrationCO.email
+                ).save()
+                Profile profile = new Profile(role: Role.findByAuthority(RoleConstant.USER), user: user)
+                profile.save()
+                dto = new DTO(true, "Registration is successful.")
+            }
+
+
+        } catch (Exception ex) {
+            dto = new DTO(false, ex.message)
+        }
+        return dto
+    }
+
 }
