@@ -36,6 +36,8 @@ dependencies {
     }
  /*=====This dependency is for Postgres SQL=========*/
     runtime 'org.postgresql:postgresql:42.2.5'
+    compile "io.micronaut:micronaut-security-jwt"
+    annotationProcessor "io.micronaut:micronaut-security"
 }
 
 shadowJar {

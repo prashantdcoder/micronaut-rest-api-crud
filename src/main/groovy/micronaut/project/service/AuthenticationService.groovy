@@ -5,6 +5,8 @@ import io.micronaut.security.token.jwt.generator.AccessRefreshTokenGenerator
 import io.micronaut.security.token.jwt.render.AccessRefreshToken
 import micronaut.project.CO.LoginCO
 import micronaut.project.DTO.DTO
+import micronaut.project.VO.UserVO
+import micronaut.project.domain.User
 
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -16,10 +18,15 @@ class AuthenticationService {
     AccessRefreshTokenGenerator accessRefreshTokenGenerator
 
 
-    DTO generateJWT(LoginCO loginCO) {
+    DTO login(LoginCO loginCO) {
         DTO dto
         try {
-            dto = new DTO(true, generateJwtAccessToken(loginCO))
+            User user = User.findByUsername(loginCO.username)
+            if (!user) {
+                dto = new DTO(false, "No record exists")
+            } else {
+                dto = new DTO(true, generateJwtAccessToken(user))
+            }
         } catch (Exception ex) {
             dto = new DTO(false, ex.getMessage())
         }
@@ -27,18 +34,11 @@ class AuthenticationService {
     }
 
 
-    Map generateJwtAccessToken(LoginCO loginCO) {
-        UserDetails userDetails = new UserDetails(loginCO.username, ["ROLE_USER", "ROLE_ADMIN"])
+    UserVO generateJwtAccessToken(User user) {
+        List<String> roles = User.fetchUserRoles(user)
+        UserDetails userDetails = new UserDetails(user.username, roles)
         Optional<AccessRefreshToken> accessRefreshToken = accessRefreshTokenGenerator.generate(userDetails)
-        Map map = [
-                'username'    : loginCO.username,
-                'accessToken' : accessRefreshToken.get().accessToken,
-                'refreshToken': accessRefreshToken.get().refreshToken
-
-        ]
-        return map
-
-
+        return new UserVO(user, roles, accessRefreshToken)
     }
 
 
